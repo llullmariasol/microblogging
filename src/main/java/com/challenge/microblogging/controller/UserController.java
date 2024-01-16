@@ -5,12 +5,14 @@ import com.challenge.microblogging.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserController {
 
     @Autowired
@@ -45,6 +47,17 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Otros endpoints como obtener tweets de un usuario, seguir, dejar de seguir
+    @PostMapping("/{followerId}/follow/{followingId}")
+    public ResponseEntity<UserDTO> followUser(@PathVariable Long followerId, @PathVariable Long followingId) {
+        UserDTO updatedUser = userService.followUser(followerId, followingId);
+        return (updatedUser != null) ? new ResponseEntity<>(updatedUser, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
+    @PostMapping("/{followerId}/unfollow/{followingId}")
+    public ResponseEntity<UserDTO> unfollowUser(@PathVariable Long followerId, @PathVariable Long followingId) {
+        UserDTO updatedUser = userService.unfollowUser(followerId, followingId);
+        return (updatedUser != null) ? new ResponseEntity<>(updatedUser, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    // Otros endpoints como obtener tweets de un usuario, seguir, dejar de seguir
 }

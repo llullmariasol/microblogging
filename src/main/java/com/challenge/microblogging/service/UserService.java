@@ -6,18 +6,21 @@ import com.challenge.microblogging.model.User;
 import com.challenge.microblogging.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserMapper userMapper;
 
+    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         User userToCreate = userMapper.mapDTOToEntity(userDTO);
         User newUser = userRepository.save(userToCreate);
@@ -51,6 +54,34 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    // obtener tweets de un usuario, seguir/dejar de seguir
+    @Transactional
+    public UserDTO followUser(Long followerId, Long followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+
+        if (follower != null && following != null) {
+            follower.getFollowing().add(followingId);
+            userRepository.save(follower);
+            return userMapper.mapEntityToDTO(follower);
+        } else {
+            return null; // TODO - Manejar el caso cuando los usuarios no existen
+        }
+    }
+
+    @Transactional
+    public UserDTO unfollowUser(Long followerId, Long followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+
+        if (follower != null && following != null) {
+            follower.getFollowing().remove(followingId);
+            userRepository.save(follower);
+            return userMapper.mapEntityToDTO(follower);
+        } else {
+            return null; //TODO - Manejar el caso cuando los usuarios no existen, con excepciones?
+        }
+    }
+    // obtener tweets de un usuario? o en tweet service mejor
+
 
 }
