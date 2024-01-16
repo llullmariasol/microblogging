@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class TweetMapper {
 
-    public static TweetDTO mapEntityToDTO(Tweet tweet) {
+    public TweetDTO mapEntityToDTO(Tweet tweet) {
         return new TweetDTO(tweet.getId(), tweet.getUserId(), tweet.getContent());
     }
 
-    public static Tweet mapDTOToEntity(TweetDTO tweetDTO) {
+    public Tweet mapDTOToEntity(TweetDTO tweetDTO) {
         Tweet tweet = new Tweet();
         tweet.setId(tweetDTO.getId());
         tweet.setUserId(tweetDTO.getUserId());
