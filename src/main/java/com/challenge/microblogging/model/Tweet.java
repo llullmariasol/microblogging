@@ -1,9 +1,6 @@
 package com.challenge.microblogging.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +18,13 @@ public class Tweet {
     private Long id;
 
     private Long userId;
+
+    @Column(length = 280)
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     // ver lo que falta
 }

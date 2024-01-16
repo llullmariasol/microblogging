@@ -32,6 +32,8 @@ public class User {
     @Email(message = "El formato del correo electrónico no es válido.")
     private String email;
 
-    //TODO - agregar relaciones
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Tweet> tweets;
 
+    //TODO - agregar relaciones
 }

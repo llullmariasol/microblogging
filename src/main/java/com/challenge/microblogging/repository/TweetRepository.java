@@ -4,8 +4,11 @@ import com.challenge.microblogging.model.Tweet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Set;
+
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
-    // Puedes agregar consultas personalizadas si es necesario.
-    // Spring Data JPA generará automáticamente las consultas basadas en el nombre del método.
+    // Recupera los tweets de los usuarios a los que sigue un usuario específico
+    List<Tweet> findByUserIdIn(Set<Long> userIds);
 }

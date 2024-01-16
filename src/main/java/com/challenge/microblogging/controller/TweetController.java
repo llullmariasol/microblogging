@@ -1,6 +1,7 @@
 package com.challenge.microblogging.controller;
 
 import com.challenge.microblogging.dto.TweetDTO;
+import com.challenge.microblogging.model.Tweet;
 import com.challenge.microblogging.service.TweetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequestMapping("/tweets")
 @Validated
 public class TweetController {
+
     @Autowired
     private TweetService tweetService;
 
@@ -48,6 +50,12 @@ public class TweetController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //tweets de un usuario
     //timeline de tweets - Deben poder ver una línea de tiempo que muestre los tweets de los usuarios a los que siguen.
+    @GetMapping("/timeline/{userId}")
+    public ResponseEntity<List<Tweet>> getTimeline(@PathVariable Long userId) {
+        List<Tweet> timelineTweets = tweetService.getTimelineTweets(userId);
+        return ResponseEntity.ok(timelineTweets);
+    }
+
+    //tweets de un usuario?
 }
