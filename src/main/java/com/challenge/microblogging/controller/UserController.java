@@ -59,5 +59,4 @@ public class UserController {
         return (updatedUser != null) ? new ResponseEntity<>(updatedUser, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // Otros endpoints como obtener tweets de un usuario, seguir, dejar de seguir
 }

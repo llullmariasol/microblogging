@@ -81,7 +81,5 @@ public class UserService {
             return null; //TODO - Manejar el caso cuando los usuarios no existen, con excepciones?
         }
     }
-    // obtener tweets de un usuario? o en tweet service mejor
-
 
 }
