@@ -1,5 +1,6 @@
 package com.challenge.microblogging.model;
 
+import jakarta.validation.constraints.Email;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +29,9 @@ public class User {
     @ElementCollection
     private Set<Long> following;
 
+    @Email(message = "El formato del correo electrónico no es válido.")
     private String email;
 
-    //otros
+    //TODO - agregar relaciones
+
 }

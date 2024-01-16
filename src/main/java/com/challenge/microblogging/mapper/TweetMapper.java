@@ -12,10 +12,6 @@ public class TweetMapper {
     }
 
     public Tweet mapDTOToEntity(TweetDTO tweetDTO) {
-        Tweet tweet = new Tweet();
-        tweet.setId(tweetDTO.getId());
-        tweet.setUserId(tweetDTO.getUserId());
-        tweet.setContent(tweetDTO.getContent());
-        return tweet;
+        return new Tweet(tweetDTO.getId(), tweetDTO.getUserId(), tweetDTO.getContent());
     }
 }

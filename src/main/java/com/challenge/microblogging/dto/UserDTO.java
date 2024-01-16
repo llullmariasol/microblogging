@@ -1,5 +1,6 @@
 package com.challenge.microblogging.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,6 @@ public class UserDTO {
 
     private Set<Long> following;
 
-
-    // otros campos
+    @Email(message = "El formato del correo electrónico no es válido.") // todo -traducir a ingles
+    private String email;
 }
