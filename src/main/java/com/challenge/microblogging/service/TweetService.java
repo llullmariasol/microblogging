@@ -4,6 +4,8 @@ import com.challenge.microblogging.dto.TweetDTO;
 import com.challenge.microblogging.mapper.TweetMapper;
 import com.challenge.microblogging.model.Tweet;
 import com.challenge.microblogging.repository.TweetRepository;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +20,8 @@ public class TweetService {
     @Autowired
     private TweetMapper tweetMapper;
 
-    public TweetDTO createTweet(TweetDTO tweetDTO) {
+    @Transactional
+    public TweetDTO createTweet(@Valid TweetDTO tweetDTO) {
         Tweet tweetToCreate = tweetMapper.mapDTOToEntity(tweetDTO);
         Tweet newTweet = tweetRepository.save(tweetToCreate);
         return tweetMapper.mapEntityToDTO(newTweet);

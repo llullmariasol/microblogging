@@ -2,21 +2,24 @@ package com.challenge.microblogging.controller;
 
 import com.challenge.microblogging.dto.TweetDTO;
 import com.challenge.microblogging.service.TweetService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/tweets")
+@Validated
 public class TweetController {
     @Autowired
     private TweetService tweetService;
 
     @PostMapping
-    public ResponseEntity<TweetDTO> createTweet(@RequestBody TweetDTO tweetDTO) {
+    public ResponseEntity<TweetDTO> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
         TweetDTO createdTweet = tweetService.createTweet(tweetDTO);
         return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
     }
@@ -45,5 +48,6 @@ public class TweetController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Otros endpoints relacionados con tweets
+    //tweets de un usuario
+    //timeline de tweets - Deben poder ver una línea de tiempo que muestre los tweets de los usuarios a los que siguen.
 }
