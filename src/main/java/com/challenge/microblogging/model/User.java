@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -26,6 +27,13 @@ public class User {
     @Column(length = 50)
     private String name;
 
+    @Column(length = 280)
+    private String bio;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "join_date")
+    private Date joinDate;
+
     @ElementCollection
     private Set<Long> following;
 
@@ -34,6 +42,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Tweet> tweets;
-
-    //TODO - agregar relaciones
 }

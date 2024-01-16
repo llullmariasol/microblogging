@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -22,9 +24,19 @@ public class Tweet {
     @Column(length = 280)
     private String content;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creation_date")
+    private Date creationDate;
+
+    private boolean deleted = false;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    // ver lo que falta
+    public void markAsDeleted() {
+        this.deleted = true;
+    }
+
+    //TODO - dónde las validaciones?
 }

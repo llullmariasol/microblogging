@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -29,4 +30,8 @@ public class UserDTO {
 
     @Email(message = "El formato del correo electrónico no es válido.") // todo -traducir a ingles
     private String email;
+
+    private String bio;
+
+    private Date joinDate;
 }

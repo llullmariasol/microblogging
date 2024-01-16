@@ -66,9 +66,9 @@ public class TweetService {
         UserDTO user = userService.getUserById(userId);
         if (user != null) {
             Set<Long> followingIds = user.getFollowing();
-            return tweetRepository.findByUserIdIn(followingIds); // TODO - ordenarlos por fecha, ver modelo de datos
+            return tweetRepository.findByUserIdInAndDeletedFalseOrderByCreationDateDesc(followingIds);
         }
         return Collections.emptyList();
-    }
+    } //TODO - los más recientes obtenerlos de caché?
 
 }

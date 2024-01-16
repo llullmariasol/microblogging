@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -19,4 +21,8 @@ public class TweetDTO {
     @NotBlank(message = "The tweet content cannot be blank.")
     @Size(max = 280, message = "The tweet content cannot exceed 280 characters.")
     private String content;
+
+    private Date creationDate;
+
+    private boolean deleted;
 }

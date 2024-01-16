@@ -9,6 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
-    // Recupera los tweets de los usuarios a los que sigue un usuario específico
-    List<Tweet> findByUserIdIn(Set<Long> userIds);
+    List<Tweet> findByUserIdInAndDeletedFalseOrderByCreationDateDesc(Set<Long> userIds);
 }
