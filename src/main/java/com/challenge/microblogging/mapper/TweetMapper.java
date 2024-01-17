@@ -4,7 +4,6 @@ import com.challenge.microblogging.dto.TweetDTO;
 import com.challenge.microblogging.model.Tweet;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface TweetMapper {

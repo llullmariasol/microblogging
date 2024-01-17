@@ -61,7 +61,7 @@ public class TweetService {
         return tweetRepository.deleteById(id);
     }
 
-    public Flux<TweetDTO> getTimelineTweets(String userId) {
+    public Flux<TweetDTO> getTimelineTweets(Long userId) {
         return userService.getUserById(userId)
                 .flatMapMany(user -> {
                     Set<Long> followingIds = user.getFollowing();
@@ -70,6 +70,9 @@ public class TweetService {
                 })
                 .switchIfEmpty(Flux.empty());
     }
+
+
+
     //TODO - los más recientes obtenerlos de caché?
 
 }

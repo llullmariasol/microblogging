@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Data
 public class TweetDTO {
-    private Long id;
+    private String id;
     private Long userId; // creador del tweet
 
     @NotBlank(message = "The tweet content cannot be blank.")

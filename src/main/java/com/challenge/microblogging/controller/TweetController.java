@@ -50,7 +50,7 @@ public class TweetController {
     }
 
     @GetMapping("/timeline/{userId}")
-    public ResponseEntity<Flux<TweetDTO>> getTimeline(@PathVariable String userId) {
+    public ResponseEntity<Flux<TweetDTO>> getTimeline(@PathVariable Long userId) {
         Flux<TweetDTO> timelineTweets = tweetService.getTimelineTweets(userId);
         return ResponseEntity.ok(timelineTweets);
     }
