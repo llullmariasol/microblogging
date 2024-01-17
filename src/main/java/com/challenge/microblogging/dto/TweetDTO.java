@@ -3,10 +3,7 @@ package com.challenge.microblogging.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Setter
 @Getter
+@Data
 public class TweetDTO {
     private Long id;
     private Long userId; // creador del tweet

@@ -1,13 +1,14 @@
 package com.challenge.microblogging.repository;
 
 import com.challenge.microblogging.model.Tweet;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 
-import java.util.List;
 import java.util.Set;
 
-@Repository
-public interface TweetRepository extends JpaRepository<Tweet, Long> {
-    List<Tweet> findByUserIdInAndDeletedFalseOrderByCreationDateDesc(Set<Long> userIds);
+public interface TweetRepository extends ReactiveMongoRepository<Tweet, String> {
+
+    @Query(value = "{ 'userId': { $in: ?0 }, 'deleted': false }", sort = "{ 'creationDate': -1 }")
+    Flux<Tweet> findByUserIdInAndDeletedFalseOrderByCreationDateDesc(Set<Long> userIds);
 }

@@ -2,16 +2,15 @@ package com.challenge.microblogging.mapper;
 
 import com.challenge.microblogging.dto.TweetDTO;
 import com.challenge.microblogging.model.Tweet;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@Component
-public class TweetMapper {
+@Mapper
+public interface TweetMapper {
+    @Mapping(source = "creationDate", target = "creationDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    TweetDTO mapEntityToDTO(Tweet tweet);
 
-    public TweetDTO mapEntityToDTO(Tweet tweet) {
-        return new TweetDTO(tweet.getId(), tweet.getUserId(), tweet.getContent());
-    }
-
-    public Tweet mapDTOToEntity(TweetDTO tweetDTO) {
-        return new Tweet(tweetDTO.getId(), tweetDTO.getUserId(), tweetDTO.getContent());
-    }
+    @Mapping(source = "creationDate", target = "creationDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    Tweet mapDTOToEntity(TweetDTO tweetDTO);
 }

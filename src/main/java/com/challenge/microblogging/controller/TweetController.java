@@ -1,7 +1,6 @@
 package com.challenge.microblogging.controller;
 
 import com.challenge.microblogging.dto.TweetDTO;
-import com.challenge.microblogging.model.Tweet;
 import com.challenge.microblogging.service.TweetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/tweets")
@@ -21,41 +20,38 @@ public class TweetController {
     private TweetService tweetService;
 
     @PostMapping
-    public ResponseEntity<TweetDTO> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
-        TweetDTO createdTweet = tweetService.createTweet(tweetDTO);
+    public ResponseEntity<Mono<TweetDTO>> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
+        Mono<TweetDTO> createdTweet = tweetService.createTweet(tweetDTO);
         return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TweetDTO> getTweetById(@PathVariable Long id) {
-        TweetDTO tweet = tweetService.getTweetById(id);
+    public ResponseEntity<Mono<TweetDTO>> getTweetById(@PathVariable String id) {
+        Mono<TweetDTO> tweet = tweetService.getTweetById(id);
         return (tweet != null) ? new ResponseEntity<>(tweet, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
-    public ResponseEntity<List<TweetDTO>> getAllTweets() {
-        List<TweetDTO> tweets = tweetService.getAllTweets();
+    public ResponseEntity<Flux<TweetDTO>> getAllTweets() {
+        Flux<TweetDTO> tweets = tweetService.getAllTweets();
         return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TweetDTO> updateTweet(@PathVariable Long id, @RequestBody TweetDTO tweetDTO) {
-        TweetDTO updatedTweet = tweetService.updateTweet(id, tweetDTO);
+    public ResponseEntity<Mono<TweetDTO>> updateTweet(@PathVariable String id, @RequestBody TweetDTO tweetDTO) {
+        Mono<TweetDTO> updatedTweet = tweetService.updateTweet(id, tweetDTO);
         return (updatedTweet != null) ? new ResponseEntity<>(updatedTweet, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTweet(@PathVariable Long id) {
+    public ResponseEntity<Mono<Void>> deleteTweet(@PathVariable String id) {
         tweetService.deleteTweet(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //timeline de tweets - Deben poder ver una línea de tiempo que muestre los tweets de los usuarios a los que siguen.
     @GetMapping("/timeline/{userId}")
-    public ResponseEntity<List<Tweet>> getTimeline(@PathVariable Long userId) {
-        List<Tweet> timelineTweets = tweetService.getTimelineTweets(userId);
+    public ResponseEntity<Flux<TweetDTO>> getTimeline(@PathVariable String userId) {
+        Flux<TweetDTO> timelineTweets = tweetService.getTimelineTweets(userId);
         return ResponseEntity.ok(timelineTweets);
     }
-
-    //tweets de un usuario?
 }

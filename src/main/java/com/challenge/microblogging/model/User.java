@@ -2,10 +2,9 @@ package com.challenge.microblogging.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 import java.util.Set;
@@ -14,7 +13,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-@Entity
+@Data
+@Document(collection = "users")
 public class User {
 
     @Id
@@ -42,4 +42,5 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Tweet> tweets;
+    //todo -VER VALIDACIONEA
 }
