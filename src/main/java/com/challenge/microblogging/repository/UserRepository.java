@@ -1,13 +1,11 @@
 package com.challenge.microblogging.repository;
 
 import com.challenge.microblogging.model.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Mono;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByName(String name);
+public interface UserRepository extends ReactiveMongoRepository<User, Long> {
+    Mono<User> findByName(String name);
 
-    User findByEmail(String email);
-
+    Mono<User> findByEmail(String email);
 }
