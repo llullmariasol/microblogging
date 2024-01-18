@@ -1,14 +1,11 @@
 package com.challenge.microblogging.controller;
 
 import com.challenge.microblogging.dto.TweetDTO;
-import com.challenge.microblogging.dto.UserDTO;
-import com.challenge.microblogging.exception.ResourceNotFoundException;
 import com.challenge.microblogging.service.TweetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,31 +18,35 @@ import java.util.List;
 @Validated
 public class TweetController {
 
+    private final TweetService tweetService;
+
     @Autowired
-    private TweetService tweetService;
+    public TweetController(TweetService tweetService) {
+        this.tweetService = tweetService;
+    }
 
     @PostMapping("/new")
     public ResponseEntity<TweetDTO> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
         TweetDTO createdTweet = tweetService.createTweet(tweetDTO);
-        return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTweet);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TweetDTO> getTweetById(@PathVariable String id) {
         TweetDTO tweet = tweetService.getTweetById(id);
-        return new ResponseEntity<>(tweet, HttpStatus.OK);
+        return ResponseEntity.ok(tweet);
     }
 
     @GetMapping
     public ResponseEntity<List<TweetDTO>> getAllTweets() {
         List<TweetDTO> tweets = tweetService.getAllTweets();
-        return new ResponseEntity<>(tweets, HttpStatus.OK);
+        return ResponseEntity.ok(tweets);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTweet(@PathVariable String id) {
         tweetService.deleteTweet(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/timeline/{userId}")
