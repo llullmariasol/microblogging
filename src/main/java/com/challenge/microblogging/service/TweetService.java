@@ -8,6 +8,7 @@ import com.challenge.microblogging.model.Tweet;
 import com.challenge.microblogging.repository.TweetRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -52,11 +53,11 @@ public class TweetService {
         tweetRepository.save(tweetToUpdate);
     }
 
-    public List<TweetDTO> getTimelineTweets(String userId) {
+    public List<TweetDTO> getTimelineTweets(String userId, Pageable pageable) {
         UserDTO user = userService.getUserById(userId);
-
         Set<String> followingIds = user.getFollowing();
-        List<Tweet> timelineTweets = tweetRepository.findByUserIdInAndDeletedFalseOrderByCreationDateDesc(followingIds);
+        List<Tweet> timelineTweets = tweetRepository
+                .findByUserIdInAndDeletedFalseOrderByCreationDateDesc(followingIds, pageable);
         return timelineTweets.stream()
                 .map(tweetMapper::mapEntityToDTO)
                 .collect(Collectors.toList());

@@ -6,6 +6,9 @@ import com.challenge.microblogging.exception.ResourceNotFoundException;
 import com.challenge.microblogging.service.TweetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -46,8 +49,14 @@ public class TweetController {
     }
 
     @GetMapping("/timeline/{userId}")
-    public ResponseEntity<List<TweetDTO>> getTimeline(@PathVariable String userId) {
-        List<TweetDTO> timelineTweets = tweetService.getTimelineTweets(userId);
+    public ResponseEntity<List<TweetDTO>> getTimeline(
+            @PathVariable String userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        List<TweetDTO> timelineTweets = tweetService.getTimelineTweets(userId, pageable);
         return ResponseEntity.ok(timelineTweets);
     }
 }
