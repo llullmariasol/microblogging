@@ -18,35 +18,31 @@ import java.util.List;
 @Validated
 public class TweetController {
 
-    private final TweetService tweetService;
-
     @Autowired
-    public TweetController(TweetService tweetService) {
-        this.tweetService = tweetService;
-    }
+    private TweetService tweetService;
 
     @PostMapping("/new")
     public ResponseEntity<TweetDTO> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
         TweetDTO createdTweet = tweetService.createTweet(tweetDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTweet);
+        return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TweetDTO> getTweetById(@PathVariable String id) {
         TweetDTO tweet = tweetService.getTweetById(id);
-        return ResponseEntity.ok(tweet);
+        return new ResponseEntity<>(tweet, HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<List<TweetDTO>> getAllTweets() {
         List<TweetDTO> tweets = tweetService.getAllTweets();
-        return ResponseEntity.ok(tweets);
+        return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTweet(@PathVariable String id) {
         tweetService.deleteTweet(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/timeline/{userId}")
