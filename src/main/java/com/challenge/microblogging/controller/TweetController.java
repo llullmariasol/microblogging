@@ -1,6 +1,8 @@
 package com.challenge.microblogging.controller;
 
 import com.challenge.microblogging.dto.TweetDTO;
+import com.challenge.microblogging.dto.UserDTO;
+import com.challenge.microblogging.exception.ResourceNotFoundException;
 import com.challenge.microblogging.service.TweetService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,7 @@ public class TweetController {
     @Autowired
     private TweetService tweetService;
 
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<TweetDTO> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
         TweetDTO createdTweet = tweetService.createTweet(tweetDTO);
         return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
@@ -28,7 +30,7 @@ public class TweetController {
     @GetMapping("/{id}")
     public ResponseEntity<TweetDTO> getTweetById(@PathVariable String id) {
         TweetDTO tweet = tweetService.getTweetById(id);
-        return (tweet != null) ? new ResponseEntity<>(tweet, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(tweet, HttpStatus.OK);
     }
 
     @GetMapping

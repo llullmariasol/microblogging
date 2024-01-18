@@ -1,6 +1,7 @@
 package com.challenge.microblogging.service;
 
 import com.challenge.microblogging.dto.UserDTO;
+import com.challenge.microblogging.exception.ResourceNotFoundException;
 import com.challenge.microblogging.mapper.UserMapper;
 import com.challenge.microblogging.model.User;
 import com.challenge.microblogging.repository.UserRepository;
@@ -26,7 +27,8 @@ public class UserService {
 
     public UserDTO getUserById(String id) {
         return userRepository.findById(id)
-                .map(userMapper::mapEntityToDTO).orElse(null);
+                .map(userMapper::mapEntityToDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
     }
 
     public List<UserDTO> getAllUsers() {
@@ -36,15 +38,12 @@ public class UserService {
     }
 
     public UserDTO updateUser(String id, UserDTO userDTO) {
-        User existingUser = userRepository.findById(id).orElse(null);
-        if (existingUser != null) {
-            User updatedUser = userMapper.mapDTOToEntity(userDTO);
-            updatedUser.setId(existingUser.getId());
-            User savedUser = userRepository.save(updatedUser);
-            return userMapper.mapEntityToDTO(savedUser);
-        } else {
-            return null;
-        }
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+        User updatedUser = userMapper.mapDTOToEntity(userDTO);
+        updatedUser.setId(existingUser.getId());
+        User savedUser = userRepository.save(updatedUser);
+        return userMapper.mapEntityToDTO(savedUser);
     }
 
     public void deleteUser(String id) {
@@ -52,27 +51,23 @@ public class UserService {
     }
 
     public UserDTO followUser(String followerId, String followingId) {
-        User follower = userRepository.findById(followerId).orElse(null);
-        User following = userRepository.findById(followingId).orElse(null);
-        if (follower != null && following != null) {
-            follower.getFollowing().add(followingId);
-            userRepository.save(follower);
-            return userMapper.mapEntityToDTO(follower);
-        } else {
-            return null; // TODO - Manejar el caso cuando los usuarios no existen
-        }
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Follower not found with id " + followerId));
+        userRepository.findById(followingId)
+                .orElseThrow(() -> new ResourceNotFoundException("User to follow not found with id " + followingId));
+        follower.getFollowing().add(followingId);
+        userRepository.save(follower);
+        return userMapper.mapEntityToDTO(follower);
     }
 
     public UserDTO unfollowUser(String followerId, String followingId) {
-        User follower = userRepository.findById(followerId).orElse(null);
-        User following = userRepository.findById(followingId).orElse(null);
-        if (follower != null && following != null) {
-            follower.getFollowing().remove(followingId);
-            userRepository.save(follower);
-            return userMapper.mapEntityToDTO(follower);
-        } else {
-            return null;
-        }
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Follower not found with id " + followerId));
+        userRepository.findById(followingId)
+                .orElseThrow(() -> new ResourceNotFoundException("User to follow not found with id " + followingId));
+        follower.getFollowing().remove(followingId);
+        userRepository.save(follower);
+        return userMapper.mapEntityToDTO(follower);
+
     }
-    //TODO - Manejar el caso cuando los usuarios no existen, con excepciones?
 }

@@ -1,7 +1,6 @@
 package com.challenge.microblogging.controller;
 
 import com.challenge.microblogging.dto.UserDTO;
-import com.challenge.microblogging.exception.ResourceNotFoundException;
 import com.challenge.microblogging.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -29,22 +26,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable String id) {
-        try {
-            UserDTO userDTO = userService.getUserById(id);
-            if (userDTO == null) {
-                throw new ResourceNotFoundException("User not found with id " + id);
-            }
-            return new ResponseEntity<>(userDTO, HttpStatus.OK);
-
-        } catch (ResourceNotFoundException e) {
-            String message = "Resource not found: " + e.getMessage() + " (id=" + id + ")";
-
-            Map<String, Object> body = new HashMap<>();
-            body.put("message", message);
-
-            return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
+        UserDTO userDTO = userService.getUserById(id);
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
     @GetMapping
