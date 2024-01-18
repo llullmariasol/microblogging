@@ -11,7 +11,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Setter
 @Getter
-@Data
 @Document(collection = "tweets")
 public class Tweet {
 
@@ -37,6 +36,4 @@ public class Tweet {
     public void markAsDeleted() {
         this.deleted = true;
     }
-
-    //TODO - dónde las validaciones? cambian para mongo?
 }

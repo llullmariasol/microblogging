@@ -13,7 +13,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-@Data
 @Document(collection = "users")
 public class User {
 
@@ -42,5 +41,4 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Tweet> tweets;
-    //todo -VER VALIDACIONEA
 }

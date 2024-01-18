@@ -12,11 +12,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
-@Data
 public class UserDTO {
     private Long id;
 
-    //TODO - traducir a ingles
     @NotBlank(message = "El nombre de usuario no puede estar en blanco.")
     @Size(max = 15, message = "El nombre de usuario no puede exceder los 15 caracteres.")
     private String username;
