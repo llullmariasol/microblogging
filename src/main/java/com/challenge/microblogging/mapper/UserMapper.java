@@ -5,11 +5,12 @@ import com.challenge.microblogging.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mapping(source = "creationDate", target = "creationDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Mapping(source = "joinDate", target = "joinDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
     UserDTO mapEntityToDTO(User user);
 
-    @Mapping(source = "creationDate", target = "creationDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Mapping(source = "joinDate", target = "joinDate", dateFormat = "yyyy-MM-dd HH:mm:ss")
     User mapDTOToEntity(UserDTO userDTO);
+
 }

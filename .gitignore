@@ -29,8 +29,6 @@ HELP.md
 /.mvn/
 /mvnw
 /mvnw.bat
-mvnw
-mvnw.cmd
 /log/
 *.log*
 target/

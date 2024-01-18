@@ -6,9 +6,9 @@ import com.challenge.microblogging.model.User;
 import com.challenge.microblogging.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -19,59 +19,60 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public Mono<UserDTO> createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
         User userToCreate = userMapper.mapDTOToEntity(userDTO);
-        return userRepository.save(userToCreate)
-                .map(userMapper::mapEntityToDTO);
+        return userMapper.mapEntityToDTO(userRepository.save(userToCreate));
     }
 
-    public Mono<UserDTO> getUserById(Long id) {
+    public UserDTO getUserById(String id) {
         return userRepository.findById(id)
-                .map(userMapper::mapEntityToDTO);
+                .map(userMapper::mapEntityToDTO).orElse(null);
     }
 
-    public Flux<UserDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userRepository.findAll()
-                .map(userMapper::mapEntityToDTO);
+                .stream().map(userMapper::mapEntityToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Mono<UserDTO> updateUser(Long id, UserDTO userDTO) {
-        return userRepository.findById(id)
-                .flatMap(existingUser -> {
-                    User updatedUser = userMapper.mapDTOToEntity(userDTO);
-                    updatedUser.setId(existingUser.getId());
-                    return userRepository.save(updatedUser);
-                })
-                .map(userMapper::mapEntityToDTO);
+    public UserDTO updateUser(String id, UserDTO userDTO) {
+        User existingUser = userRepository.findById(id).orElse(null);
+        if (existingUser != null) {
+            User updatedUser = userMapper.mapDTOToEntity(userDTO);
+            updatedUser.setId(existingUser.getId());
+            User savedUser = userRepository.save(updatedUser);
+            return userMapper.mapEntityToDTO(savedUser);
+        } else {
+            return null;
+        }
     }
 
-    public Mono<Void> deleteUser(Long id) {
-        return userRepository.deleteById(id);
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
     }
 
-    public Mono<UserDTO> followUser(Long followerId, Long followingId) {
-        return userRepository.findById(followerId)
-                .flatMap(follower -> {
-                    return userRepository.findById(followingId)
-                            .flatMap(following -> {
-                                follower.getFollowing().add(followingId);
-                                return userRepository.save(follower);
-                            });
-                })
-                .map(userMapper::mapEntityToDTO);
+    public UserDTO followUser(String followerId, String followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+        if (follower != null && following != null) {
+            follower.getFollowing().add(followingId);
+            userRepository.save(follower);
+            return userMapper.mapEntityToDTO(follower);
+        } else {
+            return null; // TODO - Manejar el caso cuando los usuarios no existen
+        }
     }
 
-    public Mono<UserDTO> unfollowUser(Long followerId, Long followingId) {
-        return userRepository.findById(followerId)
-                .flatMap(follower -> {
-                    return userRepository.findById(followingId)
-                            .flatMap(following -> {
-                                follower.getFollowing().remove(followingId);
-                                return userRepository.save(follower);
-                            });
-                })
-                .map(userMapper::mapEntityToDTO);
+    public UserDTO unfollowUser(String followerId, String followingId) {
+        User follower = userRepository.findById(followerId).orElse(null);
+        User following = userRepository.findById(followingId).orElse(null);
+        if (follower != null && following != null) {
+            follower.getFollowing().remove(followingId);
+            userRepository.save(follower);
+            return userMapper.mapEntityToDTO(follower);
+        } else {
+            return null;
+        }
     }
-
     //TODO - Manejar el caso cuando los usuarios no existen, con excepciones?
 }

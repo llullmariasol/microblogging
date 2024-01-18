@@ -4,14 +4,10 @@ import com.challenge.microblogging.dto.TweetDTO;
 import com.challenge.microblogging.dto.UserDTO;
 import com.challenge.microblogging.mapper.TweetMapper;
 import com.challenge.microblogging.model.Tweet;
-import com.challenge.microblogging.model.User;
 import com.challenge.microblogging.repository.TweetRepository;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,48 +26,39 @@ public class TweetService {
     @Autowired
     private UserService userService;
 
-    public Mono<TweetDTO> createTweet(@Valid TweetDTO tweetDTO) {
+    public TweetDTO createTweet(@Valid TweetDTO tweetDTO) {
         Tweet tweetToCreate = tweetMapper.mapDTOToEntity(tweetDTO);
-        return tweetRepository.save(tweetToCreate)
-                .map(tweetMapper::mapEntityToDTO);
+        return tweetMapper.mapEntityToDTO(tweetRepository.save(tweetToCreate));
     }
 
-    public Mono<TweetDTO> getTweetById(String id) {
+    public TweetDTO getTweetById(String id) {
         return tweetRepository.findById(id)
-                .map(tweetMapper::mapEntityToDTO);
+                .map(tweetMapper::mapEntityToDTO).orElse(null);
     }
 
-    public Flux<TweetDTO> getAllTweets() {
+    public List<TweetDTO> getAllTweets() {
         return tweetRepository.findAll()
-                .map(tweetMapper::mapEntityToDTO);
+                .stream().map(tweetMapper::mapEntityToDTO)
+                .collect(Collectors.toList());
     }
 
-    public Mono<TweetDTO> updateTweet(String id, TweetDTO tweetDTO) {
-        return tweetRepository.findById(id)
-                .flatMap(existingTweet -> {
-                    Tweet updatedTweet = tweetMapper.mapDTOToEntity(tweetDTO);
-                    updatedTweet.setId(existingTweet.getId());
-                    return tweetRepository.save(updatedTweet)
-                            .map(tweetMapper::mapEntityToDTO);
-                })
-                .switchIfEmpty(Mono.empty());
+    public void deleteTweet(String id) {
+        tweetRepository.findById(id).ifPresent(tweet -> tweet.setDeleted(true));
     }
 
-    public Mono<Void> deleteTweet(String id) {
-        return tweetRepository.deleteById(id);
+    public List<TweetDTO> getTimelineTweets(String userId) {
+        UserDTO user = userService.getUserById(userId);
+
+        if (user != null) {
+            Set<String> followingIds = user.getFollowing();
+            List<Tweet> timelineTweets = tweetRepository.findByUserIdInAndDeletedFalseOrderByCreationDateDesc(followingIds);
+            return timelineTweets.stream()
+                    .map(tweetMapper::mapEntityToDTO)
+                    .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
     }
-
-    public Flux<TweetDTO> getTimelineTweets(Long userId) {
-        return userService.getUserById(userId)
-                .flatMapMany(user -> {
-                    Set<Long> followingIds = user.getFollowing();
-                    return tweetRepository.findByUserIdInAndDeletedFalseOrderByCreationDateDesc(followingIds)
-                            .map(tweetMapper::mapEntityToDTO);
-                })
-                .switchIfEmpty(Flux.empty());
-    }
-
-
 
     //TODO - los más recientes obtenerlos de caché?
 

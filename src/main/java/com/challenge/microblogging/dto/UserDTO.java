@@ -8,26 +8,19 @@ import lombok.*;
 import java.util.Date;
 import java.util.Set;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Setter
 @Getter
 public class UserDTO {
-    private Long id;
-
-    @NotBlank(message = "El nombre de usuario no puede estar en blanco.")
-    @Size(max = 15, message = "El nombre de usuario no puede exceder los 15 caracteres.")
+    private String id;
+    @NotBlank(message = "The username cannot be blank.")
+    @Size(max = 15, message = "The username cannot exceed 15 characters.")
     private String username;
-
-    @Size(max = 50, message = "El nombre no puede exceder los 50 caracteres.")
+    @Size(max = 50, message = "The name cannot exceed 50 characters.")
     private String name;
-
-    private Set<Long> following;
-
-    @Email(message = "El formato del correo electrónico no es válido.") // todo -traducir a ingles
+    private Set<String> following;
+    @Email(message = "The email format is not valid.")
     private String email;
-
     private String bio;
-
     private Date joinDate;
 }

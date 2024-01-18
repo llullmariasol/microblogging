@@ -8,8 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/tweets")
@@ -20,38 +20,32 @@ public class TweetController {
     private TweetService tweetService;
 
     @PostMapping
-    public ResponseEntity<Mono<TweetDTO>> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
-        Mono<TweetDTO> createdTweet = tweetService.createTweet(tweetDTO);
+    public ResponseEntity<TweetDTO> createTweet(@Valid @RequestBody TweetDTO tweetDTO) {
+        TweetDTO createdTweet = tweetService.createTweet(tweetDTO);
         return new ResponseEntity<>(createdTweet, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Mono<TweetDTO>> getTweetById(@PathVariable String id) {
-        Mono<TweetDTO> tweet = tweetService.getTweetById(id);
+    public ResponseEntity<TweetDTO> getTweetById(@PathVariable String id) {
+        TweetDTO tweet = tweetService.getTweetById(id);
         return (tweet != null) ? new ResponseEntity<>(tweet, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
-    public ResponseEntity<Flux<TweetDTO>> getAllTweets() {
-        Flux<TweetDTO> tweets = tweetService.getAllTweets();
+    public ResponseEntity<List<TweetDTO>> getAllTweets() {
+        List<TweetDTO> tweets = tweetService.getAllTweets();
         return new ResponseEntity<>(tweets, HttpStatus.OK);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Mono<TweetDTO>> updateTweet(@PathVariable String id, @RequestBody TweetDTO tweetDTO) {
-        Mono<TweetDTO> updatedTweet = tweetService.updateTweet(id, tweetDTO);
-        return (updatedTweet != null) ? new ResponseEntity<>(updatedTweet, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Mono<Void>> deleteTweet(@PathVariable String id) {
+    public ResponseEntity<Void> deleteTweet(@PathVariable String id) {
         tweetService.deleteTweet(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/timeline/{userId}")
-    public ResponseEntity<Flux<TweetDTO>> getTimeline(@PathVariable Long userId) {
-        Flux<TweetDTO> timelineTweets = tweetService.getTimelineTweets(userId);
+    public ResponseEntity<List<TweetDTO>> getTimeline(@PathVariable String userId) {
+        List<TweetDTO> timelineTweets = tweetService.getTimelineTweets(userId);
         return ResponseEntity.ok(timelineTweets);
     }
 }
