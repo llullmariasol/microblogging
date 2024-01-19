@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -22,7 +23,8 @@ public class User {
     private String bio;
     @CreatedDate
     private Date joinDate;
-    private Set<String> following;
+    private Set<String> following = new HashSet<>();
+    private Set<String> followers = new HashSet<>();
     @Indexed(unique = true)
     private String email;
 }

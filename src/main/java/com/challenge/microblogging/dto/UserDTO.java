@@ -20,6 +20,7 @@ public class UserDTO {
     @Size(max = 50, message = "The name cannot exceed 50 characters.")
     private String name;
     private Set<String> following;
+    private Set<String> followers;
     @Email(message = "The email format is not valid.")
     private String email;
     private String bio;

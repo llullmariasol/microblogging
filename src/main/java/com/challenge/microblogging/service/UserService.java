@@ -47,26 +47,39 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
+        User userToDelete = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
+
+        for (String followerId : userToDelete.getFollowers()) {
+            User follower = userRepository.findById(followerId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Follower not found with id " + followerId));
+            follower.getFollowing().remove(id);
+            userRepository.save(follower);
+        }
         userRepository.deleteById(id);
     }
 
     public UserDTO followUser(String followerId, String followingId) {
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Follower not found with id " + followerId));
-        userRepository.findById(followingId)
+        User following = userRepository.findById(followingId)
                 .orElseThrow(() -> new ResourceNotFoundException("User to follow not found with id " + followingId));
         follower.getFollowing().add(followingId);
+        following.getFollowers().add(followerId);
         userRepository.save(follower);
+        userRepository.save(following);
         return userMapper.mapEntityToDTO(follower);
     }
 
     public UserDTO unfollowUser(String followerId, String followingId) {
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new ResourceNotFoundException("Follower not found with id " + followerId));
-        userRepository.findById(followingId)
+        User following = userRepository.findById(followingId)
                 .orElseThrow(() -> new ResourceNotFoundException("User to follow not found with id " + followingId));
         follower.getFollowing().remove(followingId);
+        following.getFollowers().remove(followerId);
         userRepository.save(follower);
+        userRepository.save(following);
         return userMapper.mapEntityToDTO(follower);
     }
 }
