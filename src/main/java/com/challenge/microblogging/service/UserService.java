@@ -68,6 +68,5 @@ public class UserService {
         follower.getFollowing().remove(followingId);
         userRepository.save(follower);
         return userMapper.mapEntityToDTO(follower);
-
     }
 }
