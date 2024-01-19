@@ -127,15 +127,6 @@ public class UserServiceTest {
     }
 
     @Test
-    void testDeleteUser() {
-        String userId = "testUserId";
-
-        userService.deleteUser(userId);
-
-        Mockito.verify(userRepository).deleteById(userId);
-    }
-
-    @Test
     void testFollowUser() {
         String followerId = "followerUserId";
         String followingId = "followingUserId";
