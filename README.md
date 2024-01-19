@@ -28,13 +28,9 @@ La API desarrollada proporciona endpoints con las siguientes funcionalidades:
 - Eliminación de tweets.
 - Obtención de una línea de tiempo basada en los usuarios seguidos.
 
-Arquitectura:
-
-Implementación basada en una arquitectura MVC (Modelo-Vista-Controlador).
-Desarrollado en Java utilizando Spring Boot.
-Persistencia de datos en MongoDB.
-Contenedorización con Docker para facilitar la implementación y distribución.
-
-## Cómo levantar el proyecto localmente
-
-La aplicación estará disponible en [http://localhost:8080](http://localhost:8080).
+## Cómo levantar el proyecto localmente usando Docker
+1. Clonar el repositorio
+2. Navegar al directorio del proyecto: `cd microblogging`
+3. Ejecutar el siguiente comando: `docker compose up`
+4. Se puede chequear los containers e imágenes levantados usando los siguientes comandos respectivamente: `docker ps` y `docker images`
+5. La aplicación estará disponible en [http://localhost:6868](http://localhost:6868) y se puede probar utilizando Postman (en la raíz del repositorio se encuentra una colección "microblogging.json" con los endpoints)
