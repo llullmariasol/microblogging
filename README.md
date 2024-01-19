@@ -26,7 +26,7 @@ La API desarrollada proporciona endpoints con las siguientes funcionalidades:
 - Creación de nuevos tweets.
 - Consulta de información de tweets por ID.
 - Eliminación de tweets.
-- Obtención de una línea de tiempo basada en los usuarios seguidos.
+- Obtención de una línea de tiempo basada en los usuarios seguidos. En este caso se implementó paginación en la consulta.
 
 ## Cómo levantar el proyecto localmente usando Docker
 1. Clonar el repositorio
@@ -34,3 +34,4 @@ La API desarrollada proporciona endpoints con las siguientes funcionalidades:
 3. Ejecutar el siguiente comando: `docker compose up`
 4. Se puede chequear los containers e imágenes levantados usando los siguientes comandos respectivamente: `docker ps` y `docker images`
 5. La aplicación estará disponible en [http://localhost:6868](http://localhost:6868) y se puede probar utilizando Postman (en la raíz del repositorio se encuentra una colección "microblogging.json" con los endpoints)
+6. Para finalizar los contenedores usar el comando `docker compose down`
