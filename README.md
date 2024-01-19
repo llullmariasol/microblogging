@@ -33,5 +33,5 @@ La API desarrollada proporciona endpoints con las siguientes funcionalidades:
 2. Navegar al directorio del proyecto: `cd microblogging`
 3. Ejecutar el siguiente comando: `docker compose up`
 4. Se puede chequear los containers e imágenes levantados usando los siguientes comandos respectivamente: `docker ps` y `docker images`
-5. La aplicación estará disponible en [http://localhost:6868](http://localhost:6868) y se puede probar utilizando Postman (en la raíz del repositorio se encuentra una colección "microblogging.json" con los endpoints)
+5. La aplicación estará disponible en [http://localhost:6868](http://localhost:6868) y se puede probar utilizando Postman (en la raíz del repositorio se encuentra una colección "microblogging-api.postman_collection.json" con los endpoints)
 6. Para finalizar los contenedores usar el comando `docker compose down`
