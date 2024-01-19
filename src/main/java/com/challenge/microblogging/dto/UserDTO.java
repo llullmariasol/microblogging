@@ -8,7 +8,8 @@ import lombok.*;
 import java.util.Date;
 import java.util.Set;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class UserDTO {

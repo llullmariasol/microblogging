@@ -7,7 +7,8 @@ import lombok.*;
 
 import java.util.Date;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Setter
 @Getter
 public class TweetDTO {
