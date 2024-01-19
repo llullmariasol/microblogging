@@ -12,15 +12,29 @@ La aplicación de Microblogging es una versión simplificada de una plataforma d
 La arquitectura de la aplicación posee tres capas: Controller, Service, Repository, cada una con una responsabilidad específica.
 ![Arquitectura](https://github.com/llullmariasol/microblogging/assets/50931383/acf4a650-357a-420b-b7d2-ff185cf803a7)
 
-## Pasos para levantar el proyecto localmente
+## Funcionalidades
+La API desarrollada proporciona endpoints con las siguientes funcionalidades:
 
-Siga estos pasos para ejecutar la aplicación localmente:
+**Usuarios**
+- Creación de nuevos usuarios.
+- Consulta de información de usuarios por ID.
+- Actualización de información de usuarios.
+- Eliminación de usuarios.
+- Seguir y dejar de seguir a otros usuarios.
+  
+**Tweets**
+- Creación de nuevos tweets.
+- Consulta de información de tweets por ID.
+- Eliminación de tweets.
+- Obtención de una línea de tiempo basada en los usuarios seguidos.
 
-1. Clonar el repositorio
-2. Navegar al directorio del proyecto: `cd microblogging`
-3. Construir la imagen de Docker: `docker build -t microblogging .`
-4. Ejecutar la aplicación en un contenedor: `docker run -p 8080:8080 microblogging`
-VER
+Arquitectura:
+
+Implementación basada en una arquitectura MVC (Modelo-Vista-Controlador).
+Desarrollado en Java utilizando Spring Boot.
+Persistencia de datos en MongoDB.
+Contenedorización con Docker para facilitar la implementación y distribución.
+
+## Cómo levantar el proyecto localmente
+
 La aplicación estará disponible en [http://localhost:8080](http://localhost:8080).
-
-## Contribuciones
